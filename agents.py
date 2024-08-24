@@ -1,9 +1,8 @@
-import time
-from crewai import Agent
+# agents.py
 from tools.search_tools import SearchTools
+from crewai import Agent
 
-
-class AINewsLetterAgents():
+class AINewsLetterAgents:
 
     def __init__(self):
         self.search_tools = SearchTools()
@@ -13,7 +12,7 @@ class AINewsLetterAgents():
             role='Editor',
             goal='Oversee the creation of the AI Newsletter',
             backstory="""With a keen eye for detail and a passion for storytelling, you ensure that the newsletter
-            not only informs but also engages and inspires the readers. """,
+            not only informs but also engages and inspires the readers.""",
             allow_delegation=True,
             verbose=True,
             max_iter=15
@@ -50,9 +49,8 @@ class AINewsLetterAgents():
             newsletter format guidelines and maintain consistency throughout.""",
             verbose=True,
         )
-    
-    def add_delay(self, *args, **kwargs):
-        """Add a 30-second delay before the agent proceeds."""
-        delay_seconds = 30
+
+    def add_delay(self, delay_seconds=30):
+        """Add a delay before the agent proceeds."""
         print(f"Waiting for {delay_seconds} seconds before making the next API call...")
         time.sleep(delay_seconds)
