@@ -1,10 +1,11 @@
-from crewai import Crew, Process
-from langchain_openai import ChatOpenAI
+# main.py
 from agents import AINewsLetterAgents
 from tasks import AINewsLetterTasks
 from file_io import save_markdown
-import logging
+from crewai import Crew, Process
+from langchain_openai import ChatOpenAI
 from dotenv import load_dotenv
+import logging
 
 load_dotenv()
 
