@@ -11,6 +11,8 @@ duckduckgo-search = "^4.4.2"
 python-dotenv = "^1.0.1"
 requests = "^2.31.0"
 beautifulsoup4 = "^4.12.3"
+langchain = "^0.1"
+pydantic = "^2.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "^24.8.0"
