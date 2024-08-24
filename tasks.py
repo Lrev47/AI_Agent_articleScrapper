@@ -1,4 +1,3 @@
-# tasks.py
 import time
 import logging
 from datetime import datetime
@@ -7,8 +6,8 @@ from pydantic import BaseModel, Field
 
 # Pydantic model for tool invocation validation
 class ToolInvocationArgs(BaseModel):
-    tool_name: str = Field(..., description="Name of the tool to be called")
-    arguments: dict = Field(..., description="Arguments required by the tool")
+    tool_name: str = Field(..., description="The name of the tool to be called.")
+    arguments: dict = Field(..., description="A dictionary of arguments to be passed to the tool.")
 
 class AINewsLetterTasks:
 
@@ -71,33 +70,32 @@ class AINewsLetterTasks:
 
     def execute_task_with_delay(self, task, delay_seconds=30):
         try:
-            # Ensure that the agent has at least one tool and it's callable
+            # Ensure the agent has at least one tool and it's callable
             if not task.agent.tools or not callable(task.agent.tools[0]):
                 raise ValueError("Agent does not have a valid tool for execution.")
-            
-            # Extract the tool (first one from the list of tools)
+        
+            # Extract the tool function
             tool_function = task.agent.tools[0]
-            
+        
             # Prepare the tool invocation argument structure
-            tool_invocation = ToolInvocationArgs(
-                tool_name=tool_function.__name__, 
-                arguments={  # Provide necessary arguments
+            tool_invocation = {
+                "tool_name": tool_function.__name__,
+                "arguments": {
                     "coworker": "NewsletterCompiler",
                     "task": "Compile the newsletter",
                     "context": "I have provided a markdown-formatted analysis for each news story..."
                 }
-            )
-            
+            }
+        
             # Execute the task using the validated tool invocation arguments
-            result = tool_function(**tool_invocation.arguments)  # Call the tool function with arguments
-            
+            result = tool_function(**tool_invocation["arguments"])  # Call the tool function with arguments
+        
             # Wait for the specified delay before allowing the next API call
             logging.info(f"Waiting for {delay_seconds} seconds before making the next API request...")
             time.sleep(delay_seconds)
-            
-            # Return the result of the task
-            return result
         
+            return result
+    
         except Exception as e:
             logging.error(f"Error during task execution: {e}")
             return None

@@ -1,6 +1,6 @@
-import time
 from tools.search_tools import SearchTools
 from crewai import Agent
+import time
 
 class AINewsLetterAgents:
 
