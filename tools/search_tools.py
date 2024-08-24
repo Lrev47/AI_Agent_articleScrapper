@@ -1,45 +1,27 @@
-import json
-import os
+# tools/search_tools.py
+from langchain_community.tools import tool
 
-import requests
-from langchain.tools import tool
-
-
-class SearchTools():
+class SearchTools:
 
     @tool("Search the internet")
-    def search_internet(self, query):
-        """Useful to search the internet
-        about a a given topic and return relevant results"""
-        print("Searching the internet...")
-        top_result_to_return = 5
-        url = "https://google.serper.dev/search"
-        payload = json.dumps(
-            {"q": query, "num": top_result_to_return, "tbm": "nws"})
-        headers = {
-            'X-API-KEY': os.environ['SERPER_API_KEY'],
-            'content-type': 'application/json'
-        }
-        response = requests.request("POST", url, headers=headers, data=payload)
-        # check if there is an organic key
-        if 'organic' not in response.json():
-            return "Sorry, I couldn't find anything about that, there could be an error with you serper api key."
-        else:
-            results = response.json()['organic']
-            string = []
-            print("Results:", results[:top_result_to_return])
-            for result in results[:top_result_to_return]:
-                try:
-                    # Attempt to extract the date
-                    date = result.get('date', 'Date not available')
-                    string.append('\n'.join([
-                        f"Title: {result['title']}",
-                        f"Link: {result['link']}",
-                        f"Date: {date}",  # Include the date in the output
-                        f"Snippet: {result['snippet']}",
-                        "\n-----------------"
-                    ]))
-                except KeyError:
-                    next
+    def search_internet(self, input_data: dict):
+        """Search the internet about a given topic and return relevant results."""
+        # Extract 'query' from the input dictionary
+        query = input_data.get("query")
+        if not query:
+            return "Error: 'query' field is required."
 
-            return '\n'.join(string)
+        print(f"Searching the internet for: {query}")
+
+        # Mocked search logic - replace with actual search implementation
+        results = [
+            {"url": "https://example.com/article1", "content": f"Search results for {query}: Content of article 1."},
+            {"url": "https://example.com/article2", "content": f"Search results for {query}: Content of article 2."}
+        ]
+
+        # Format and return the results
+        result_strings = [
+            f"URL: {result['url']}\nContent: {result['content']}\n"
+            for result in results
+        ]
+        return "\n".join(result_strings)
